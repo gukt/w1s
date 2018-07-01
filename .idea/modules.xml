@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/w1s.iml" filepath="$PROJECT_DIR$/w1s.iml" />
+      <module fileurl="file://$PROJECT_DIR$/w1s-api/w1s-api.iml" filepath="$PROJECT_DIR$/w1s-api/w1s-api.iml" />
+    </modules>
+  </component>
+</project>

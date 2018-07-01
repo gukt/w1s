@@ -5,12 +5,6 @@
 package com.w1s.api.util;
 
 public abstract class JsonProcessException extends RuntimeException {
-    public JsonProcessException() {}
-
-    public JsonProcessException(String message) {
-        super(message);
-    }
-
     public JsonProcessException(String message, Throwable cause) {
         super(message, cause);
     }
