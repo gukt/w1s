@@ -1,6 +1,8 @@
 var alreadyLocate = false;
 var currentLat ,currentLng;
 var driveLine;
+var dataCache;
+var placeId = 0;
 
 var tmpl = [
 	'<li class="list-group-item" style="padding-left: 35px;">'
@@ -55,7 +57,7 @@ var putDot = function(lat,lng,num){
 		// iconUrl: 'images/marker-icon.png',
 	    //shadowUrl: 'images/marker-shadow.png',
 	    iconSize:[1, 1], // size of the icon
-	    html:'<div style="width: 25px;height: 41px;line-height: 30px;text-align: center;vertical-align: middle;background-repeat: no-repeat;background-image: url(css/images/marker-icon.png);color: #000;font-size: 10px;">'+num+'</div>'
+	    html:'<div style="width: 25px;height: 41px;line-height: 30px;text-align: center;vertical-align: middle;background-repeat: no-repeat;background-image: url(css/images/marker-icon.png);color: #000;font-size: 10px;">'+(num==0?'':num)+'</div>'
 	    // shadowSize:   [50, 64], // size of the shadow
 	    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
 	    // shadowAnchor: [4, 62],  // the same for the shadow
@@ -71,8 +73,9 @@ var putMultiDot = function(dots,iconUrl){
 		var myIcon = L.divIcon({
 			// iconUrl: 'images/marker-icon.png',
 		    //shadowUrl: 'images/marker-shadow.png',
+
 		    iconSize:[1, 1], // size of the icon
-		    html:'<div style="width: 25px;height: 41px;line-height: 30px;text-align: center;vertical-align: middle;background-repeat: no-repeat;background-image: url('+iconUrl+');color: #000;font-size: 10px;">'+item[2]+'</div>'
+		    html:'<div style="background-size: 50px 82px;width: 50px;height: 82px;line-height: 52px;text-align: center;vertical-align: middle;background-repeat: no-repeat;background-image: url('+iconUrl+');color: #000;font-size: 20px;">'+(item[2]==0?'':item[2])+'</div>'
 		    // shadowSize:   [50, 64], // size of the shadow
 		    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
 		    // shadowAnchor: [4, 62],  // the same for the shadow
@@ -92,10 +95,10 @@ var createLegend = function(text,pos,bgcolor,fontcolor,onclick){
 	legend.onAdd = function (map) {
 	    var div = L.DomUtil.create('div', 'info legend');
 	    $(div).css({
-		    'width': '180px',
-			'height': '180px',
+		    'width': '160px',
+			'height': '160px',
 			'text-align': 'center',
-			'line-height': '180px',
+			'line-height': '160px',
 			'border-radius': '180px',
 			'background-color': bgcolor,
 			'color': fontcolor,

@@ -1,10 +1,9 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8"  %>
-<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
+<%@ page language="java" contentType="text/html;charset=UTF-8"  %> 
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<%--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">--%>
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
 	<title>智能停车</title>
 	<link rel="stylesheet" href="css/leaflet.css"/>
 	<link rel="stylesheet" href="css/bootstrap.css"/>
@@ -52,6 +51,15 @@
 		    bottom: 100px;
 		}
 
+		.leaflet-touch .leaflet-control-layers-toggle {
+		    width: 100px;
+		    height: 100px;
+		}
+
+		.leaflet-retina .leaflet-control-layers-toggle {
+		    background-size: 70px 70px;
+		}
+
 	</style>
    
 </head>
@@ -84,7 +92,7 @@
 				<div class="col-sm-4">价格优先</div>
 			</div>
 		</li>
-		<li class="list-group-item" style="padding-left: 35px;">
+		<!-- <li class="list-group-item" style="padding-left: 35px;">
 			<div class="row" style="line-height: 80px;"> 
 				<div class="col-sm-2" style="line-height: 200px;" >
 					<img src="css/images/park-info.png" style=" width: 100%;">
@@ -111,7 +119,7 @@
 					<img src="css/images/position.png" style="width: 100%;">
 				</div>
 			</div>
-		</li>
+		</li> -->
 
 	</ul>
 	<div id="mapid"></div>
@@ -159,12 +167,12 @@
 	            	</div>
 	            	<div class="row" style="line-height: 100px;">
 	            		<div class="col-sm-12" style="color:#ea5151;">
-	            			<button type="button" class="btn btn-primary" style="width: 50%;border-radius: 53px;line-height: 76px;margin: 23px 13px;font-size: 40px;border: none;background-color: #393636;">寻找新停车场</button>
+	            			<button type="button" class="btn btn-primary" style="width: 50%;border-radius: 53px;line-height: 76px;margin: 23px 13px;font-size: 40px;border: none;background-color: #393636;" id="findNew">寻找新停车场</button>
 	            		</div>
 	            	</div>
 	            	<div class="row" style="line-height: 100px;">
 	            		<div class="col-sm-12" style="color:#ea5151;">
-	            			<button type="button" class="btn btn-primary" style="width: 50%;border-radius: 53px;line-height: 76px;margin: 23px 13px;font-size: 40px;border: none;background-color: #ea5151;">确定</button>
+	            			<button type="button" class="btn btn-primary" style="width: 50%;border-radius: 53px;line-height: 76px;margin: 23px 13px;font-size: 40px;border: none;background-color: #ea5151;" id="park">确定</button>
 	            		</div>
 	            	</div>
 					
@@ -238,17 +246,37 @@
 	</div>
 
 	<!-- 支付成功弹框 -->
-	<div style="margin-top: 10%;" class="modal fade" id="paySuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	    <div class="modal-dialog" style="width: 35%;">
+	<div style="margin-top: 50%;" class="modal fade" id="paySuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="width: 35%;font-size: 35px;">
 	        <div class="modal-content" style="border-radius: 20px;">
 	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding: 3px;background-color: #0c0c0c;color: #fff;opacity: 1;line-height: 12px;font-weight: 100;border-radius: 16px;">&times;</button>
-	                <h4 class="modal-title" style="text-align: center;font-weight: 700;">支付结果</h4>
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding: 5px;background-color: #0c0c0c;color: #fff;opacity: 1;line-height: 21px;font-weight: 100;border-radius: 25px;">&times;</button>
+	                <h1 class="modal-title" style="text-align: center;font-weight: 700;">支付结果</h1>
 	            </div>
 	            <div class="modal-body" style="text-align: center;padding: 0% 10%;">	            	
-	            	<div class="row" style="line-height: 55px;">
+	            	<div class="row" style="line-height: 70px;">
 	            		<div class="col-sm-12" style="color:#ea5151;">
-	            			<span style="font-size: 23px;color: green;">支付成功</span>
+	            			<span style="font-size: 50px;color: green;" id="payResult">支付成功</span>
+	            		</div>
+	            	</div>
+					
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- 停车弹框 -->
+	<div style="margin-top: 50%;" class="modal fade" id="parkSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="width: 35%;font-size: 35px;">
+	        <div class="modal-content" style="border-radius: 20px;">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding: 5px;background-color: #0c0c0c;color: #fff;opacity: 1;line-height: 21px;font-weight: 100;border-radius: 25px;">&times;</button>
+	                <h1 class="modal-title" style="text-align: center;font-weight: 700;">停车结果</h1>
+	            </div>
+	            <div class="modal-body" style="text-align: center;padding: 0% 10%;">	            	
+	            	<div class="row" style="line-height: 70px;">
+	            		<div class="col-sm-12" style="color:#ea5151;">
+	            			<span style="font-size: 50px;color: green;" id="parkResult">停车成功</span>
 	            		</div>
 	            	</div>
 					
@@ -258,7 +286,7 @@
 	</div>
 
 	<!-- 详情弹框 -->
-	<div style="margin-top: 35%;font-size: 27px;"  class="modal fade" id="detailInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div style="margin-top: 15%;font-size: 27px;"  class="modal fade" id="detailInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	    <div class="modal-dialog" style=" width: 85%;">
 	        <div class="modal-content" style="border-radius: 20px;">
 	            <div class="modal-header" style="padding: 0px;">
@@ -294,7 +322,7 @@
 							</div>
 	            		</div>
 	            		<div class="col-sm-3" >
-							<img src="css/images/position.png" style="width: 100%;">
+							<img src="css/images/position.png" style="width: 100%;" id="detail-locate">
 	            		</div>
 	            	</div>
 	            	<div class="row" >
@@ -350,10 +378,11 @@
 	</div>
 
 	<script type="text/javascript">
+		var clitetId = new Date().getTime();
 
-		$(function(){
-			var clitetId = new Date().getTime();
+		var refresh = function(){
 			$.ajax({
+				//url:'http://172.20.10.4:8084/parking/list',
 				url:'${pageContext.request.contextPath}/parking/list', 
 				data: {
 				},
@@ -367,8 +396,12 @@
 				  		var type2 = []; //厕所
 				  		var type3 = []; //便利店
 				  		var posSet = [];
-
+			  			dataCache = list.data;
 						$(list.data).map(function(index,val){
+							if(val.id==12){
+								currentLat = val.latitude;
+								currentLng = val.longitude;
+							}
 							posSet.push([val.latitude,val.longitude]);
 							switch(val.type){
 								case 0:
@@ -396,11 +429,17 @@
 							$item.find("#address").data("info",val);
 							$item.find("#address").click(function(){
 								listBtnClick();
+								var lat = $(this).data('info').latitude;
+								var lng = $(this).data('info').longitude;
 								$("#detail-price").html($(this).data('info').price);
 								$("#detail-add").html($(this).data('info').address);
 								$("#detail-name").html($(this).data('info').name);
 								$("#detail-dis").html($(this).data('info').distance);
 								$("#detailInfo").modal('show');
+								/*$("#detail-locate").click(function(){
+									listBtnClick();
+									map.setView([lat,lng],18);
+								});*/
 								/*$(this).data('lat');*/
 							});
 
@@ -423,10 +462,10 @@
 						var overlays ={
 							/*"就近停":marker1,
 							"实惠停":marker2,*/
-							"<img src=\"css/images/cheap.png\" style='width:60px;' >":layerGroup0,
-							"<img src=\"css/images/here.png\" style='width:60px;'>":layerGroup1,
-							"<img src=\"css/images/month.png\" style='width:60px;'>":layerGroup2,
-							"<img src=\"css/images/power.png\" style='width:60px;'>":layerGroup3,
+							"<img src=\"css/images/cheap.png\" style='width:150px;' >":layerGroup0,
+							"<img src=\"css/images/here.png\" style='width:150px;'>":layerGroup1,
+							"<img src=\"css/images/month.png\" style='width:150px;'>":layerGroup2,
+							"<img src=\"css/images/power.png\" style='width:150px;'>":layerGroup3,
 						};
 
 						var control = L.control;
@@ -436,31 +475,40 @@
 	    			}
 				}
 			});
+		};
+
+		$(function(){
+			
+			refresh();
 
 			$("#pay-btn").click(function(){
-				$.ajax({
-					url:'${pageContext.request.contextPath}/request_pay', 
-					data: {
-						client_id:clitetId,
-						place_id:11
-					},
-					type:'post',
-					dataType: 'json',
-					//crossDomain: true,
-					success: function(result) {
-						if(result.ret>0){
-							alert("支付失败！");
-						}else{
+				if(placeId > 0 ){
+					$.ajax({
+						//url:'http://172.20.10.4:8084/request_pay',
+						url:'${pageContext.request.contextPath}/request_pay', 
+						data: {
+							client_id:clitetId,
+							place_id:placeId
+						},
+						type:'post',
+						dataType: 'json',
+						//crossDomain: true,
+						success: function(result) {
+							if(result.ret>0){
+								$("#payResult").html("支付失败!"+result.msg);
+							}else{
+								$("#payResult").html("支付成功!");
+								placeId=0;
+							}
 							$("#payInfo").modal('hide');
 							$("#paySuccess").modal('show');
 							setTimeout(function(){
 								$("#paySuccess").modal('hide');
 							},1000)
-							
-
 						}
-					}
-				});
+					});
+				}
+				
 			});
 /*
 			$.post("http://172.20.10.4:8084/parking/list",{},function(list){
@@ -489,6 +537,12 @@
 
 		$(".parkDetail").click(function(){
 			listBtnClick();
+			$("#detail-locate").data('lat',$(this).data('lat'));
+			$("#detail-locate").data('lng',$(this).data('lng'));
+			$("#detail-locate").click(function(){
+				var line = [[$("#detail-locate").data('lat'),$("#detail-locate").data('lng')],[currentLat,currentLng]];
+				driveHelp(line);
+			});
 			$("#detailInfo").modal('show');
 		});
 
@@ -509,6 +563,11 @@
 		map.on('click', function(e) {
 			console.log("You clicked the map at " + e.latlng.toString());
 		});
+		/*map.on('zoom',function(){
+			if(typeof(driveLine)!='undefined'){
+				driveLine.remove();
+			}
+		});*/
 
 
 		$(".list-group .flag").click(function(){
@@ -516,6 +575,57 @@
 			var line = [[$(this).attr("lat"),$(this).attr("lng")],[currentLat,currentLng]];
 			driveHelp(line);
 			//map.setView([$(this).attr("lat"),$(this).attr("lng")],18);
+		});
+
+		$("#park").click(function(){
+			var seed = parseInt(dataCache.length*Math.random());
+			$(dataCache).map(function(index,val){
+				if(seed==index && val.type==0 && placeId<=0){
+					placeId = val.id;
+					$.ajax({
+						//url:'http://172.20.10.4:8084/parking', 
+						url:'${pageContext.request.contextPath}/parking', 
+						data: {
+							client_id:clitetId,
+							place_id:placeId
+						},
+						type:'post',
+						dataType: 'json',
+						//crossDomain: true,
+						success: function(result) {
+							if(result.ret>0){
+								$("#parkResult").html("停车失败！"+result.msg);
+							}else{
+								$("#parkResult").html("停车成功！");
+							}
+							$("#arriveInfo").modal('hide');
+							$("#parkSuccess").modal('show');
+							setTimeout(function(){
+								$("#parkSuccess").modal('hide');
+							},1000);
+						}
+					});
+					return;
+				}
+			});
+		});
+
+		var findPark = function(){
+			$("#arriveInfo").modal('hide');
+			var seed = parseInt(dataCache.length*Math.random());
+			$(dataCache).map(function(index,val){
+				if(index==seed && val.type==0){
+					var line = [[val.latitude,val.longitude],[currentLat,currentLng]];
+					driveHelp(line);
+					setTimeout(function(){
+						$("#arriveInfo").modal('show');
+					},1000);
+				}
+			});
+		};
+
+		$("#findNew").click(function(){
+			findPark();
 		});
 
 		/*var data = [
@@ -537,11 +647,16 @@
 		var layers = control.layers( {},overlays).addTo(map);*/
 
 		createLegend("就近停",'bottomleft','#3957c6','#fff',function(){
-			alert("3333");
+			//TODO:
+			findPark();
+			
 		}).addTo(map);
 
+
+
 		createLegend("实惠停",'bottomleft','#ea5151','#fff',function(){
-			alert("3333");
+			//TODO:
+			findPark();
 		}).addTo(map);
 
 		createLegend("我要支付",'bottomleft','#fff','#333',function(){
@@ -549,7 +664,8 @@
 		}).addTo(map);
 
 		createLegend("我要找车",'bottomright','#393636','#fff',function(){
-			$("#arriveInfo").modal('show');
+			map.setView([currentLat,currentLng],18);
+			//$("#arriveInfo").modal('show');
 			/*if(!alreadyLocate){
 				currentLat = 31.227702;
 				currentLng = 121.483383;

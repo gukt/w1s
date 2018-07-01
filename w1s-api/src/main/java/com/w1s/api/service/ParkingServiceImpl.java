@@ -50,7 +50,7 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public Parking beginParking(String clientId, long placeId) {
         // 检查当前是否正在停车中
-        Parking parking = parkingRepository.findByClientId(clientId);
+        Parking parking = parkingRepository.findByClientIdAndPlaceId(clientId, placeId);
         if (parking != null) {
             throw new ParkingException(ErrorCode.DUPLICATED_PARKING, "非法的请求: 当前正在停车中,结束后才能停车");
         }
