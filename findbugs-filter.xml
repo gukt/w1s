@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2018-2019 waiting1s, The Waiting1s Project
+  -->
+
+<FindBugsFilter>
+    <Match>
+        <Package name="~com\.xy\.kitty\.generated.*" />
+    </Match>
+</FindBugsFilter>

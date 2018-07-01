@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2018-2019 waiting1s, The Waiting1s Project
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+
+		 http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <import resource="context-jpa.xml"/>
+
+    <!-- 配置自动扫描的包 -->
+    <context:component-scan base-package="com.w1s.api"/>
+
+    <!--Enables the detection of @Async and @Scheduled annotations on any Spring-managed object-->
+    <task:annotation-driven/>
+
+    <!--Configures the annotation-driven Spring MVC Controller programming model.-->
+    <mvc:annotation-driven/>
+
+    <mvc:resources mapping="/**" location="/WEB-INF/"/>
+
+    <!-- 定义ViewResolver，用于支持Servlet、JSP视图解析 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+        <property name="prefix" value="/WEB-INF/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <mvc:cors>
+        <mvc:mapping path="/**" allowed-origins="*" allow-credentials="true" max-age="1800" allowed-methods="GET,POST,OPTIONS"/>
+    </mvc:cors>
+
+    <!-- 配置处理器(Handler)拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+
+            <!--定义自己的拦截-->
+            <bean class="com.w1s.api.interceptor.SecurityCheckingHandlerInterceptor">
+                <property name="whiteList">
+                    <list>
+                        <value>/login</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>
